@@ -1,7 +1,8 @@
 package com.example.demo.hatchwaysservice.service;
 
 import com.example.demo.hatchwaysservice.entity.RecipeEntity;
-import com.example.demo.hatchwaysservice.repository.RecipeRepositoryImpl;
+import com.example.demo.hatchwaysservice.repository.RecipeFileRepositoryImpl;
+import com.example.demo.hatchwaysservice.repository.RecipeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,26 +12,26 @@ import java.util.*;
 @AllArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
-    private final RecipeRepositoryImpl recipeRepository;
+    private final RecipeRepository repository;
 
     public List<RecipeEntity> findAll() {
-        return recipeRepository.findAll();
+        return repository.findAll();
     }
 
     public Optional<RecipeEntity> findByName(String recipeName) {
-        return Optional.ofNullable(recipeRepository.findByName(recipeName));
+        return Optional.ofNullable(repository.findByName(recipeName));
     }
 
-    public void save(RecipeEntity recipe) {
-        recipeRepository.save(recipe);
+    public RecipeEntity save(RecipeEntity recipe) {
+        return repository.save(recipe);
     }
 
     public void update(RecipeEntity recipe) {
-        recipeRepository.save(recipe);
+        repository.save(recipe);
     }
 
     public void delete(RecipeEntity recipe) {
-        recipeRepository.delete(recipe);
+        repository.delete(recipe);
     }
 
 }
