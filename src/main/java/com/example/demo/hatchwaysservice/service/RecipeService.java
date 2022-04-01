@@ -27,7 +27,7 @@ public interface RecipeService {
      *
      * @param recipe the recipe to be added
      */
-    void save(RecipeEntity recipe);
+    RecipeEntity save(RecipeEntity recipe);
 
     /**
      * Update existing recipe in the data store
