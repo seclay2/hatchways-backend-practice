@@ -10,8 +10,9 @@ public interface RecipeRepository {
 
     RecipeEntity findByName(String name);
 
-    void save(RecipeEntity recipe);
+    RecipeEntity save(RecipeEntity recipe);
 
     void delete(RecipeEntity recipe);
 
+    void deleteAll();
 }

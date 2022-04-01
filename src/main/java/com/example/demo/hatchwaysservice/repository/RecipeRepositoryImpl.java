@@ -1,75 +1,38 @@
 package com.example.demo.hatchwaysservice.repository;
 
 import com.example.demo.hatchwaysservice.entity.RecipeEntity;
-import com.example.demo.hatchwaysservice.entity.Recipes;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
-public class RecipeRepositoryImpl implements RecipeRepository{
+public class RecipeRepositoryImpl implements RecipeRepository {
 
-    private Map<String, RecipeEntity> repository;
+    private Map<String, RecipeEntity> data;
 
-    /**
-     *
-     * @param filename the data store file name in application properties
-     */
-    public RecipeRepositoryImpl(@Value("${data.filename}") String filename) {
-        this.repository = new HashMap<>();
-        String fileContents = getContentStringFromFile(filename);
-        for (RecipeEntity recipe : getListFromContentString(fileContents))
-            this.repository.put(recipe.getName(), recipe);
-
-    }
-
-    private RecipeRepositoryImpl(Map<String, RecipeEntity> repository) {
-        this.repository = repository;
+    public RecipeRepositoryImpl() {
+        this.data = new HashMap<>();
     }
 
     public List<RecipeEntity> findAll() {
-        return new ArrayList<>(repository.values());
+        return new ArrayList<>(data.values());
     }
 
     public RecipeEntity findByName(String name) {
-        return repository.get(name);
+        return data.get(name);
     }
 
-    public void save(RecipeEntity recipe) {
-        repository.put(recipe.getName(), recipe);
+    public RecipeEntity save(RecipeEntity recipe) {
+        data.put(recipe.getName(), recipe);
+        return data.get(recipe.getName());
     }
 
     public void delete(RecipeEntity recipe) {
-        repository.remove(recipe.getName());
+        data.remove(recipe.getName());
     }
 
-    //TODO throws IOException?
-    private String getContentStringFromFile(String filename) {
-        InputStream inputStream = RecipeRepositoryImpl.class.getResourceAsStream(filename);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
-        return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+    public void deleteAll() {
+        data.clear();
     }
 
-    private List<RecipeEntity> getListFromContentString(String fileContents) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        try {
-            Recipes recipes = objectMapper.readValue(fileContents, new TypeReference<>() {
-            });
-            return recipes.getRecipes();
-        } catch(IOException err) {
-            //TODO ObjectMapper handle exception
-            err.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
 }
