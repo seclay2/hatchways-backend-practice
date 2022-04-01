@@ -64,11 +64,12 @@ public class RecipeRepositoryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void deleteTest() {
-        RecipeEntity recipe = this.recipeRepositoryImpl.findByName("scrambledEggs");
+        String name = "testRecipe1";
+        RecipeEntity recipe = this.recipeRepositoryImpl.findByName(name);
 
         this.recipeRepositoryImpl.delete(recipe);
 
-        assertThat(this.recipeRepositoryImpl.findByName("scrambledEggs")).isNull();
+        assertThat(this.recipeRepositoryImpl.findByName(name)).isNull();
     }
 
 
