@@ -5,7 +5,6 @@ import com.example.demo.hatchwaysservice.entity.RecipeEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
@@ -14,18 +13,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RecipeRepositoryIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    @Qualifier("RecipeRepositoryImpl")
-    RecipeRepository repository;
+    RecipeRepository recipeRepositoryImpl;
 
     @BeforeEach
     private void initialSeed() {
-        this.repository.deleteAll();
-        this.repository.save(RecipeEntity.builder()
+        this.recipeRepositoryImpl.deleteAll();
+        this.recipeRepositoryImpl.save(RecipeEntity.builder()
                 .name("testRecipe1")
                 .ingredients(new String[] { "testIngredient1", "testIngredient2" })
                 .instructions(new String[] { "testInstruction1", "testInstruction2" })
                 .build());
-        this.repository.save(RecipeEntity.builder()
+        this.recipeRepositoryImpl.save(RecipeEntity.builder()
                 .name("testRecipe2")
                 .ingredients(new String[] { "testIngredient1", "testIngredient2" })
                 .instructions(new String[] { "testInstruction1", "testInstruction2" })
@@ -34,7 +32,7 @@ public class RecipeRepositoryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void findAllTest() {
-        List<RecipeEntity> recipeList = this.repository.findAll();
+        List<RecipeEntity> recipeList = this.recipeRepositoryImpl.findAll();
 
         assertThat(recipeList).isNotNull();
         assertThat(recipeList.stream().map(RecipeEntity::getName))
@@ -43,7 +41,7 @@ public class RecipeRepositoryIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void findByNameTest() {
-        RecipeEntity recipe = this.repository.findByName("testRecipe1");
+        RecipeEntity recipe = this.recipeRepositoryImpl.findByName("testRecipe1");
 
         assertThat(recipe).isNotNull();
         assertThat(recipe.getName()).isEqualTo("testRecipe1");
@@ -59,18 +57,18 @@ public class RecipeRepositoryIntegrationTest extends BaseIntegrationTest {
                 .instructions(new String[] {"testInstruction1", "testInstruction2"})
                 .build();
 
-        this.repository.save(recipe);
+        this.recipeRepositoryImpl.save(recipe);
 
-        assertThat(this.repository.findByName("testRecipe")).isNotNull();
+        assertThat(this.recipeRepositoryImpl.findByName("testRecipe")).isNotNull();
     }
 
     @Test
     public void deleteTest() {
-        RecipeEntity recipe = this.repository.findByName("scrambledEggs");
+        RecipeEntity recipe = this.recipeRepositoryImpl.findByName("scrambledEggs");
 
-        this.repository.delete(recipe);
+        this.recipeRepositoryImpl.delete(recipe);
 
-        assertThat(this.repository.findByName("scrambledEggs")).isNull();
+        assertThat(this.recipeRepositoryImpl.findByName("scrambledEggs")).isNull();
     }
 
 
